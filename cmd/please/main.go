@@ -7,13 +7,13 @@ import (
 )
 
 func main() {
-	versionPtr := flag.String("v", "no", "Request the version")
+	versionPtr := flag.Bool("v", false, "Print the version")
 	flag.Parse()
-	if *versionPtr != "no" {
+	if *versionPtr {
 		fmt.Println("Version 0.0.1")
 	} else {
 		args := flag.Args()
-		fmt.Println(strings.Join(args, "\\ "))
+		fmt.Println(strings.Join(args, " "))
 	}
 
 }
