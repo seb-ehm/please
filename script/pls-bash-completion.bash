@@ -1,3 +1,8 @@
+suggest () {
+    echo "Argument: $1" >> "bashruns.txt"
+    echo "$1" | please
+}
+
 _pls_complete()
 {
     local current_word last_command suggestion
@@ -8,7 +13,8 @@ _pls_complete()
     last_command="${last_command#"${last_command%%[![:space:]]*}"}"
     echo "Last Command: $last_command" >> "bashruns.txt"
     local IFS=$'\n'
-    suggestion=`please "$last_command"`
+
+    suggestion=$(suggest $last_command)
     echo "$suggestion" >> "bashruns.txt"
     COMPREPLY=( $(compgen -W "${suggestion}" -- $current_word ) );
     return 0
