@@ -12,41 +12,26 @@ import (
 func main() {
 	versionPtr := flag.Bool("v", false, "Print the version")
 	flag.Parse()
-	f, err := os.OpenFile("pleaseoutput.txt", os.O_APPEND|os.O_WRONLY, 0600)
-	if err != nil {
-		panic(err)
-	}
-
-	defer f.Close()
 
 	if *versionPtr {
 		fmt.Println("Version 0.0.1")
 	} else {
-		f.WriteString("Input: \n")
 		if isNoPipe(os.Stdin) {
-			f.WriteString("No Pipe \n")
 			args := flag.Args()
 			fmt.Println(strings.Join(args, " "))
 			return
 		}
 
 		reader := bufio.NewReader(os.Stdin)
-		var output []string
-		f.WriteString("Pipe: \n")
+		var commandHistory []string
 		for {
 			input, _, err := reader.ReadLine()
 			if err != nil && err == io.EOF {
 				break
 			}
-			f.WriteString(string(input))
-			output = append(output, string(input))
+			commandHistory = append(commandHistory, string(input))
 		}
-		f.WriteString("Output: \n")
-		for j := 0; j < len(output); j++ {
-			f.WriteString(output[j])
-			fmt.Printf("%s\n", output[j])
-		}
-		f.WriteString("\n")
+
 	}
 }
 
