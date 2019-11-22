@@ -30,6 +30,7 @@ func main() {
 				break
 			}
 			commandHistory = append(commandHistory, string(input))
+			fmt.Println(string(input))
 		}
 
 	}
