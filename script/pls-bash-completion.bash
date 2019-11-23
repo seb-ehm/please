@@ -1,4 +1,4 @@
-suggest () {
+_pls_suggest () {
     echo "$1" | please
 }
 
@@ -14,7 +14,7 @@ _pls_complete()
 
     local IFS=$'\n'
     # get command suggestions
-    suggestion=$(suggest $last_command)
+    suggestion=$(_pls_suggest $last_command)
     # escape single and double quotes
     suggestion=${suggestion//\"/\\\"}
     suggestion=${suggestion//\'/\\\'}
