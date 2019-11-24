@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"please/pkg/suggest"
+	"please/pkg/util"
 	"strings"
 )
 
@@ -16,7 +18,7 @@ func main() {
 	if *versionPtr {
 		fmt.Println("Version 0.0.1")
 	} else {
-		if isNoPipe(os.Stdin) {
+		if util.IsNoPipe(os.Stdin) {
 			args := flag.Args()
 			fmt.Println(strings.Join(args, " "))
 			return
@@ -30,20 +32,9 @@ func main() {
 				break
 			}
 			commandHistory = append(commandHistory, string(input))
-			fmt.Println(string(input))
+			suggestion := suggest.SuggestCommand(commandHistory)
+			fmt.Println(suggestion)
 		}
 
 	}
-}
-
-func isNoPipe(file *os.File) bool {
-	info, err := file.Stat()
-	if err != nil {
-		panic(err)
-	}
-	mode := info.Mode()
-	isPipe := mode&os.ModeNamedPipe != 0
-	isCharDevice := mode&os.ModeDevice != 0 && mode&os.ModeCharDevice != 0
-
-	return !isPipe || isCharDevice
 }
