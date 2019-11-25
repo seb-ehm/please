@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"please/pkg/suggest"
+	"please/pkg/command"
 	"please/pkg/util"
 	"strings"
 )
@@ -32,7 +32,7 @@ func main() {
 				break
 			}
 			commandHistory = append(commandHistory, string(input))
-			suggestion := suggest.SuggestCommand(commandHistory)
+			suggestion := command.Suggest(commandHistory)
 			fmt.Println(suggestion)
 		}
 
