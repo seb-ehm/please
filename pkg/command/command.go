@@ -20,3 +20,10 @@ func collectEnvironmentInfo() EnvironmentInfo {
 	env := EnvironmentInfo{}
 	return env
 }
+
+//Command is an interface implemented for all commands corrected by please
+type Command interface {
+	Name() string
+	Misspellings() []string
+	Correct(arguments []string) string
+}
