@@ -11,7 +11,7 @@ type GitInfo struct {
 	isRepo bool
 }
 
-//SuggestCommand returns a command suggestion based on the history of commands
+//Suggest returns a command suggestion based on the history of commands
 func Suggest(commandHistory []string) string {
 	return commandHistory[len(commandHistory)-1]
 }
