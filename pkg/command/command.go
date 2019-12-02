@@ -1,5 +1,7 @@
 package command
 
+import "strings"
+
 //EnvironmentInfo contains information about the local environment
 type EnvironmentInfo struct {
 	gitInfo GitInfo
@@ -21,9 +23,27 @@ func collectEnvironmentInfo() EnvironmentInfo {
 	return env
 }
 
-//Command is an interface implemented for all commands corrected by please
-type Command interface {
+//Details is an interface implemented for all commands corrected by please
+type Details interface {
 	Name() string
 	Misspellings() []string
-	Correct(arguments []string) string
+	Correct(command Command) Command
+}
+
+//Command is a structured representations of Commands
+type Command struct {
+	Sudo      bool
+	Name      string
+	Arguments []string
+}
+
+func (c Command) String() string {
+	var sb strings.Builder
+	if c.Sudo {
+		sb.WriteString("sudo ")
+	}
+	sb.WriteString(c.Name)
+	sb.WriteRune(' ')
+	sb.WriteString(strings.Join(c.Arguments[:], " "))
+	return sb.String()
 }
