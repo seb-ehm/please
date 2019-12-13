@@ -70,3 +70,22 @@ func (c Command) String() string {
 	sb.WriteString(strings.Join(c.Arguments[:], " "))
 	return sb.String()
 }
+
+//Equals returns whether two Commands are identical
+func (c *Command) Equals(other *Command) bool {
+	if c.Sudo != other.Sudo {
+		return false
+	}
+	if c.Name != other.Name {
+		return false
+	}
+	if len(c.Arguments) != len(other.Arguments) {
+		return false
+	}
+	for i := 0; i < len(c.Arguments); i++ {
+		if c.Arguments[i] != other.Arguments[i] {
+			return false
+		}
+	}
+	return true
+}

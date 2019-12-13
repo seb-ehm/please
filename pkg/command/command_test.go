@@ -1,6 +1,8 @@
 package command
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestString(t *testing.T) {
 	c := Command{true, "apt", []string{"install", "expect"}}
@@ -16,4 +18,32 @@ func testStringfunc(c Command, expected string) func(*testing.T) {
 			t.Errorf("Expected: \"%s\" but instead got \"%s\"", expected, actual)
 		}
 	}
+}
+
+func TestCommandEquals(t *testing.T) {
+
+	testCases := []struct {
+		com    Command
+		other  Command
+		result bool
+	}{
+		{Command{true, "apt", []string{"install", "expect"}},
+			Command{true, "apt", []string{"install", "expect"}},
+			true},
+
+		{Command{true, "apt", []string{"install", "expect"}},
+			Command{false, "apt", []string{"install", "expect"}},
+			false},
+	}
+	for _, tc := range testCases {
+		if !tc.com.Equals(&tc.other) == tc.result {
+			if tc.result {
+				t.Errorf("Expected \"%s\" to Equal \"%s\" ", tc.com, tc.other)
+			} else {
+				t.Errorf("Expected \"%s\" to not Equal \"%s\" ", tc.com, tc.other)
+			}
+
+		}
+	}
+
 }
