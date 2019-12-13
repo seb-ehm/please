@@ -56,3 +56,23 @@ func TestCommandEquals(t *testing.T) {
 	}
 
 }
+
+func TestNewCommand(t *testing.T) {
+	testCases := []struct {
+		s      string
+		c      Command
+		result bool
+	}{
+		{"sudo ls -lah", Command{true, "ls", []string{"-lah"}}, true},
+		{"sudo apt-get install python-pip", Command{true, "apt-get", []string{"install", "python-pip"}}, true},
+		{"ls -l", Command{false, "ls", []string{"-l"}}, true},
+		{"ls", Command{false, "ls", []string{}}, true},
+	}
+
+	for _, tc := range testCases {
+		actual := New(tc.s)
+		if !actual.Equals(&tc.c) == tc.result {
+			t.Errorf("Expected \"%s\" to correspond to Command \"%s\"", tc.s, tc.c)
+		}
+	}
+}
