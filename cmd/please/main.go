@@ -45,7 +45,7 @@ func main() {
 			flag.Usage()
 		}
 		if len(commandHistory) > 0 {
-			suggestion := command.Suggest(commandHistory)
+			suggestion := command.Suggest(command.New(commandHistory[0]))
 			fmt.Println(suggestion)
 		}
 

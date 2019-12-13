@@ -14,8 +14,9 @@ type GitInfo struct {
 }
 
 //Suggest returns a command suggestion based on the history of commands
-func Suggest(commandHistory []string) string {
-	return commandHistory[len(commandHistory)-1]
+func Suggest(command Command) string {
+
+	return command.String()
 }
 
 func collectEnvironmentInfo() EnvironmentInfo {
