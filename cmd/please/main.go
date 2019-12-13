@@ -8,7 +8,7 @@ import (
 	"os"
 	"please/pkg/command"
 	"please/pkg/util"
-	"strings"
+	"time"
 )
 
 func main() {
@@ -19,20 +19,33 @@ func main() {
 		fmt.Println("Version 0.0.1")
 	} else {
 		if util.IsNoPipe(os.Stdin) {
-			args := flag.Args()
-			fmt.Println(strings.Join(args, " "))
+			flag.Usage()
 			return
 		}
+		input := make(chan string)
+		go func() { //util.IsNoPipe currently cannot correctly identify non-pipe input from Git-for-Windows, so a timeout is necessary
+			reader := bufio.NewReader(os.Stdin)
 
-		reader := bufio.NewReader(os.Stdin)
-		var commandHistory []string
-		for {
-			input, _, err := reader.ReadLine()
-			if err != nil && err == io.EOF {
-				break
+			for {
+				data, _, err := reader.ReadLine()
+				if err != nil && err == io.EOF {
+					break
+				} else {
+					input <- string(data)
+				}
 			}
-			commandHistory = append(commandHistory, string(input))
-			suggestion := command.Suggest(commandHistory)
+			close(input)
+		}()
+		var commandHistory []string
+		timeout, _ := time.ParseDuration("1s")
+		select {
+		case line := <-input:
+			commandHistory = append(commandHistory, line)
+		case <-time.After(timeout):
+			flag.Usage()
+		}
+		if len(commandHistory) > 0 {
+			suggestion := command.Suggest(command.New(commandHistory[0]))
 			fmt.Println(suggestion)
 		}
 
