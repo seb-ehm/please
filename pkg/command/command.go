@@ -37,6 +37,29 @@ type Command struct {
 	Arguments []string
 }
 
+//New creates a new Command from a string
+func New(s string) Command {
+	sa := strings.Split(s, " ")
+
+	c := Command{}
+	i := 0
+	if len(sa) > 1 {
+		if sa[i] == "sudo" {
+			c.Sudo = true
+			i++
+		}
+		c.Name = sa[i]
+		i++
+		c.Arguments = sa[i:]
+
+	} else {
+		c.Sudo = false
+		c.Name = sa[0]
+	}
+	return c
+
+}
+
 func (c Command) String() string {
 	var sb strings.Builder
 	if c.Sudo {
