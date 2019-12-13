@@ -34,6 +34,15 @@ func TestCommandEquals(t *testing.T) {
 		{Command{true, "apt", []string{"install", "expect"}},
 			Command{false, "apt", []string{"install", "expect"}},
 			false},
+		{Command{true, "apt", []string{"install", "expect"}},
+			Command{true, "apt-get", []string{"install", "expect"}},
+			false},
+		{Command{true, "apt", []string{"install", "expect"}},
+			Command{true, "apt", []string{"install", "python-pip"}},
+			false},
+		{Command{true, "apt", []string{"install", "expect"}},
+			Command{true, "apt", []string{"install", "expect", "python-pip"}},
+			false},
 	}
 	for _, tc := range testCases {
 		if !tc.com.Equals(&tc.other) == tc.result {
